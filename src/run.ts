@@ -1,6 +1,16 @@
 import Process from "./factory/Process/Process";
 import Resource from "./factory/Resource";
 
+const stopCondition = (
+  inputs: Resource[],
+  machines: Process[],
+  clock: number
+) => {
+  return clock >= 1000;
+  /*return inputs[0].quantity === 0 &&
+    machines.every((machine) => machine.mode === "Waiting";*/
+};
+
 const run = (
   inputs: Resource[],
   machines: Process[],
@@ -17,10 +27,7 @@ const run = (
     .map((x) => x.quantity)
     .join("\t")}\t${machines.map((x) => `${x.mode}`).join("\t")}\n`;
 
-  if (
-    inputs[0].quantity === 0 &&
-    machines.every((machine) => machine.mode === "Waiting")
-  ) {
+  if (stopCondition(inputs, machines, clock)) {
     return output;
   }
   machines.forEach((x) => x.run(inputs));
